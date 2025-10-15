@@ -1,0 +1,29 @@
+name: Build Windows GUI EXE
+
+on:
+  push:
+    branches: [ main ]   # main 브랜치에 push될 때만 빌드
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up MSYS2 (for gcc)
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+
+    - name: Build GUI EXE
+      run: |
+        cd C
+        gcc dummy.c -o dummy.exe -mwindows
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dummy-gui-exe
+        path: C/dummy.exe
